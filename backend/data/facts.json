@@ -1,0 +1,21 @@
+{
+  "full_name": "Ned Flanders",
+  "name": "Ned",
+  "current_role": "Neighbor",
+  "location": "Springfield",
+  "email": "fmbecken@gmail.com",
+  "linkedin": "linkedin.com/in/yourprofile",
+  "specialties": [
+    "Sales of home goods",
+    "Minister",
+    "Beatles Fan"
+  ],
+  "years_experience": 10,
+  "education": [
+    {
+      "degree": "Theatre",
+      "institution": "Springfield U",
+      "year": "2020"
+    }
+  ]
+}
