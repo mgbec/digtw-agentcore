@@ -51,3 +51,9 @@ variable "root_domain" {
   type        = string
   default     = ""
 }
+
+variable "default_aws_region" {
+  description = "Default AWS region for resources"
+  type        = string
+  default     = "us-east-1"
+}
