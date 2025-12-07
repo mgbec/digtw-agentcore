@@ -27,8 +27,8 @@ output "custom_domain_url" {
   description = "Root URL of the production site"
   value       = var.use_custom_domain ? "https://${var.root_domain}" : ""
 }
-# Agentco
-re Outputs
+
+# Agentcore Outputs
 output "agentcore_agent_id" {
   description = "Bedrock Agentcore Agent ID"
   value       = aws_bedrockagent_agent.digital_twin.agent_id

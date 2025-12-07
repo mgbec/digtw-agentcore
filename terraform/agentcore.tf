@@ -18,7 +18,7 @@ locals {
   facts_data = jsondecode(data.local_file.facts.content)
   full_name  = local.facts_data.full_name
   name       = local.facts_data.name
-  
+
   # Build comprehensive agent instructions with all context embedded
   agent_instructions = <<-EOT
 # Your Role
@@ -74,21 +74,21 @@ resource "aws_bedrockagent_agent" "digital_twin" {
   agent_resource_role_arn = aws_iam_role.agentcore_role.arn
   foundation_model        = var.agentcore_foundation_model
   description             = "Digital twin personality agent for ${var.project_name}"
-  
+
   instruction = local.agent_instructions
 
   idle_session_ttl_in_seconds = 600
-  
+
   tags = local.common_tags
 }
 
 # Prepare the agent (required before creating alias)
 resource "aws_bedrockagent_agent_action_group" "digital_twin_default" {
-  agent_id             = aws_bedrockagent_agent.digital_twin.agent_id
-  agent_version        = "DRAFT"
-  action_group_name    = "default-action-group"
+  agent_id                   = aws_bedrockagent_agent.digital_twin.agent_id
+  agent_version              = "DRAFT"
+  action_group_name          = "default-action-group"
   skip_resource_in_use_check = true
-  
+
   # No specific actions needed for basic conversation
   action_group_executor {
     lambda = aws_lambda_function.api.arn
@@ -98,7 +98,7 @@ resource "aws_bedrockagent_agent_action_group" "digital_twin_default" {
 # Prepare the agent for deployment
 resource "null_resource" "prepare_agent" {
   depends_on = [aws_bedrockagent_agent.digital_twin]
-  
+
   provisioner "local-exec" {
     command = <<-EOT
       aws bedrock-agent prepare-agent \
@@ -106,9 +106,9 @@ resource "null_resource" "prepare_agent" {
         --region ${var.default_aws_region}
     EOT
   }
-  
+
   triggers = {
-    agent_id = aws_bedrockagent_agent.digital_twin.agent_id
+    agent_id         = aws_bedrockagent_agent.digital_twin.agent_id
     instruction_hash = md5(aws_bedrockagent_agent.digital_twin.instruction)
   }
 }
@@ -118,9 +118,9 @@ resource "aws_bedrockagent_agent_alias" "digital_twin_prod" {
   agent_id         = aws_bedrockagent_agent.digital_twin.agent_id
   agent_alias_name = "${var.environment}-alias"
   description      = "Production alias for ${var.environment} environment"
-  
+
   depends_on = [null_resource.prepare_agent]
-  
+
   tags = local.common_tags
 }
 
@@ -192,11 +192,11 @@ resource "aws_lambda_function" "agentcore_api" {
 
   environment {
     variables = {
-      CORS_ORIGINS              = var.use_custom_domain ? "https://${var.root_domain},https://www.${var.root_domain}" : "https://${aws_cloudfront_distribution.main.domain_name}"
-      AGENTCORE_AGENT_ID        = aws_bedrockagent_agent.digital_twin.agent_id
-      AGENTCORE_AGENT_ALIAS_ID  = aws_bedrockagent_agent_alias.digital_twin_prod.agent_alias_id
-      AGENTCORE_ENABLE_TRACE    = "true"
-      DEFAULT_AWS_REGION        = var.default_aws_region
+      CORS_ORIGINS             = var.use_custom_domain ? "https://${var.root_domain},https://www.${var.root_domain}" : "https://${aws_cloudfront_distribution.main.domain_name}"
+      AGENTCORE_AGENT_ID       = aws_bedrockagent_agent.digital_twin.agent_id
+      AGENTCORE_AGENT_ALIAS_ID = aws_bedrockagent_agent_alias.digital_twin_prod.agent_alias_id
+      AGENTCORE_ENABLE_TRACE   = "true"
+      DEFAULT_AWS_REGION       = var.default_aws_region
     }
   }
 
