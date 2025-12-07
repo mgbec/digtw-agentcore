@@ -5,7 +5,8 @@
 ### 1. Deploy Infrastructure
 ```bash
 cd terraform
-terraform apply
+./init.sh dev    # Initialize with backend config
+terraform apply  # Deploy everything
 ```
 
 ### 2. Get Your Endpoints

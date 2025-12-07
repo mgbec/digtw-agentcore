@@ -1,6 +1,10 @@
 terraform {
   backend "s3" {
-    # These values will be set by deployment scripts
-    # For local development, they can be passed via -backend-config
+    # Backend configuration
+    # Initialize with: terraform init -backend-config=backend-dev.tfbackend
+    # Or set these values directly:
+    # bucket = "twin-terraform-state-339712707840"
+    # key    = "dev/terraform.tfstate"
+    # region = "us-east-1"
   }
 }

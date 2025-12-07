@@ -24,14 +24,27 @@ Quick checklist before deploying Agentcore.
 ## 🚀 Deployment Steps
 
 ### Step 1: Initialize Terraform
+
+**Easy Method:**
 ```bash
 cd terraform
-terraform init
+./init.sh dev
+```
+
+**Manual Method:**
+```bash
+cd terraform
+terraform init -backend-config=backend-dev.tfbackend
 ```
 
 **Expected Output:**
 - Providers downloaded successfully
-- Backend initialized
+- Backend initialized with S3
+
+**Available Environments:**
+- `dev` - Development
+- `test` - Testing
+- `prod` - Production
 
 ### Step 2: Review Changes
 ```bash
