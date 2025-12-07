@@ -27,3 +27,22 @@ output "custom_domain_url" {
   description = "Root URL of the production site"
   value       = var.use_custom_domain ? "https://${var.root_domain}" : ""
 }
+# Agentco
+re Outputs
+output "agentcore_agent_id" {
+  description = "Bedrock Agentcore Agent ID"
+  value       = aws_bedrockagent_agent.digital_twin.agent_id
+}
+
+output "agentcore_agent_alias_id" {
+  description = "Bedrock Agentcore Agent Alias ID"
+  value       = aws_bedrockagent_agent_alias.digital_twin_prod.agent_alias_id
+}
+
+output "agentcore_api_endpoint" {
+  description = "API Gateway endpoint for Agentcore backend"
+  value       = "${aws_apigatewayv2_api.main.api_endpoint}/agentcore"
+}
+
+# Note: No Knowledge Base used to avoid OpenSearch Serverless costs
+# Context is embedded directly in agent instructions
