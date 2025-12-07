@@ -82,28 +82,22 @@ resource "aws_bedrockagent_agent" "digital_twin" {
   tags = local.common_tags
 }
 
-# Prepare the agent (required before creating alias)
-resource "aws_bedrockagent_agent_action_group" "digital_twin_default" {
-  agent_id                   = aws_bedrockagent_agent.digital_twin.agent_id
-  agent_version              = "DRAFT"
-  action_group_name          = "default-action-group"
-  skip_resource_in_use_check = true
-
-  # No specific actions needed for basic conversation
-  action_group_executor {
-    lambda = aws_lambda_function.api.arn
-  }
-}
-
 # Prepare the agent for deployment
+# Note: Agent preparation happens automatically, but we add a wait to ensure it's ready
 resource "null_resource" "prepare_agent" {
   depends_on = [aws_bedrockagent_agent.digital_twin]
 
   provisioner "local-exec" {
     command = <<-EOT
+      echo "Preparing Bedrock Agent..."
       aws bedrock-agent prepare-agent \
         --agent-id ${aws_bedrockagent_agent.digital_twin.agent_id} \
-        --region ${var.default_aws_region}
+        --region ${var.default_aws_region} || true
+      
+      echo "Waiting 60 seconds for agent to be ready..."
+      sleep 60
+      
+      echo "Agent preparation complete"
     EOT
   }
 

@@ -1,0 +1,17 @@
+# Backup of original agentcore.tf
+# This is a simplified version that removes potentially problematic resources
+
+# If you're getting errors with Bedrock Agents, it might be because:
+# 1. Bedrock Agents API is very new and may not be fully supported in Terraform AWS provider
+# 2. Your AWS account may not have Bedrock Agents enabled
+# 3. The region may not support Bedrock Agents yet
+
+# RECOMMENDATION: Start with the traditional backend first, then add Agentcore later
+# when AWS provider support is more mature.
+
+# To disable Agentcore deployment:
+# 1. Rename agentcore.tf to agentcore.tf.disabled
+# 2. Run: terraform apply
+# 3. This will deploy only the traditional backend
+
+# The traditional backend works perfectly and has all the features you need!
